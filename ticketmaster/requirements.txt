@@ -1,0 +1,5 @@
+fastapi // this library takes requests and gets responses
+uvicorn[standard] // this library gets the requests for the fastapi library and it does it even while fastapi is running
+sqlalchemy // thsi library translates python code to database code (it is not the acrtual database it is just a translator)
+psycopg2-binary // this library takes the database code and sends it to the actual database (postgresql)
+redis // this library is for caching aka savig data temporarily for fast access 
