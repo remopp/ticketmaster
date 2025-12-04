@@ -6,11 +6,13 @@ services:
     ports: 
     - "8000:8000"
     environment:
-      - DATABASE_URL=postgresql://user:password@db/ticketmaster
-      - REDIS_URL= redis://redis:6379
+      - DATABASE_URL=postgresql://admin:password123@db/ticketmaster
+      - REDIS_URL=redis://redis:6379
     depends_on:
-      - db
-      - redis
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
     volumes:
       - ./app:/code/app
 
@@ -25,6 +27,11 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d ticketmaster"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     
   redis:
     image: redis:alpine
