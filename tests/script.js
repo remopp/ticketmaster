@@ -2,13 +2,19 @@ import http from 'k6/http';
 import { check, sleep } from 'k6';
 
 export const options = {
-  vus: 10,
-  duration: '10s',
+  scenarios: {
+    flash_sale: {
+      executor: 'shared-iterations',
+      vus: 100,
+      iterations: 1000,
+      maxDuration: '30s',
+    },
+  },
 };
 export default function () {
   
   const payload = JSON.stringify({
-    user_id: Math.floor(Math.random() * 100) + 1,
+    user_id: Math.floor(Math.random() * 1000) + 1,
     event_id: 1,
   });
 

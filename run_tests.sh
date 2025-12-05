@@ -15,10 +15,10 @@ docker compose up --build -d
 echo -e "${GREEN}>>> Waiting for Database to be ready...${NC}"
 sleep 5  
 
-echo -e "${GREEN}>>> Seeding Database (1 Venue (50 capacity), 1 Event, 100 Users)...${NC}"
+echo -e "${GREEN}>>> Seeding Database (1 Venue (50 capacity), 1 Event, 1000 Users)...${NC}"
 docker exec -it ticketmaster-api-1 python -m app.seed
 
-echo -e "${GREEN}>>> Running Load Test (K6) (booking 100 users on the same event)...${NC}"
+echo -e "${GREEN}>>> Running Load Test (K6) (booking 1000 users on the same event)...${NC}"
 docker run --rm -i \
   --network ticketmaster_default \
   grafana/k6 run - < tests/script.js

@@ -23,7 +23,7 @@ db.refresh(db_event)
 if(db_event != None):
     print("event created")
 
-for i in range(1, 101):
+for i in range(1, 1001):
     db_user = models.user(id = i, email=f"test.email:{i}" , username = f"test.username:{i}" , hashed_password = "hashedpassasdafaefa") 
     db.add(db_user)
     db.commit()
