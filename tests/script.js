@@ -8,7 +8,7 @@ export const options = {
 export default function () {
   
   const payload = JSON.stringify({
-    user_id: Math.floor(Math.random() * 1000) + 1,
+    user_id: Math.floor(Math.random() * 100) + 1,
     event_id: 1,
   });
 

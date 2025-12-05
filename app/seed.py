@@ -9,7 +9,7 @@ db.query(models.Venue).delete()
 db.commit()
 print("database cleared")
 
-db_venue = models.Venue( id = 1,name = "testname" , location = "testlocation" ,  capacity = 1000)
+db_venue = models.Venue( id = 1,name = "testname" , location = "testlocation" ,  capacity = 50)
 db.add(db_venue)
 db.commit()
 db.refresh(db_venue)
@@ -23,10 +23,10 @@ db.refresh(db_event)
 if(db_event != None):
     print("event created")
 
-for i in range(1, 1001):
-    db_user = models.user(email=f"test.email:{i}" , username = f"test.username:{i}" , hashed_password = "hashedpassasdafaefa") 
+for i in range(1, 101):
+    db_user = models.user(id = i, email=f"test.email:{i}" , username = f"test.username:{i}" , hashed_password = "hashedpassasdafaefa") 
     db.add(db_user)
-db.commit()
-db.refresh(db_user)
+    db.commit()
+    db.refresh(db_user)
 if(db_user != None):
     print("users created")
