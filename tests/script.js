@@ -5,16 +5,16 @@ export const options = {
   scenarios: {
     flash_sale: {
       executor: 'shared-iterations',
-      vus: 100,
-      iterations: 1000,
-      maxDuration: '30s',
+      vus: 1000,
+      iterations: 10000,
+      maxDuration: '5m', 
     },
   },
 };
 export default function () {
   
   const payload = JSON.stringify({
-    user_id: Math.floor(Math.random() * 1000) + 1,
+    user_id: Math.floor(Math.random() * 10000) + 1,
     event_id: 1,
   });
 

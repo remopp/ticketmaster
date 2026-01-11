@@ -41,6 +41,7 @@ def book_ticket(db:Session, booking: schemas.BookingCreate):
     cap = db.query(models.Booking).filter(models.Booking.event_id == booking.event_id).count()
     if(cap >= event.venue.capacity):
         raise ValueError("venue is fully booked")
+    
     db_booking = models.Booking( user_id = booking.user_id , event_id = booking.event_id)
     db.add(db_booking)
     db.commit()

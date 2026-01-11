@@ -33,8 +33,12 @@ class Event(base):
 class Booking(base):
     __tablename__ = "bookings"
     id=Column(Integer, primary_key=True, index = True)
-    user_id = Column(Integer , ForeignKey("users.id"))
-    event_id= Column(Integer , ForeignKey("events.id"))
+    # OLD CODE (O(B) - full table scan):
+    # user_id = Column(Integer , ForeignKey("users.id"))
+    # event_id= Column(Integer , ForeignKey("events.id"))
+    # NEW CODE (O(log B) - uses B-tree index):
+    user_id = Column(Integer , ForeignKey("users.id"), index=True)
+    event_id= Column(Integer , ForeignKey("events.id"), index=True)
     b_time= Column(DateTime , server_default=func.now())
     user = relationship("user", back_populates="bookings")
     event = relationship("Event",back_populates="bookings")
