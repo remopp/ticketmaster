@@ -4,9 +4,9 @@
 
 This project demonstrates a high-concurrency ticketing system designed to handle race conditions and high traffic loads.
 
-* **Concurrency Control:** Implemented **Pessimistic Locking** (`SELECT ... FOR UPDATE`) to guarantee data integrity. This prevents "overselling" tickets even when thousands of users attempt to book the same seat at the exact same millisecond.
+* **Concurrency Control:** Implemented **Redis atomic counter** (`DECR`) for lightning-fast ticket reservation. Redis handles the race condition in-memory, allowing thousands of parallel requests without database locks.
 * **Database Optimization:** Added **indexes** on foreign keys (`event_id`, `user_id`) for efficient query performance at scale.
-* **Scalable Architecture:** Fully containerized with **Docker**, using **PostgreSQL** for persistence and **Redis** for high-speed caching (provisioned for future implementation).
+* **Scalable Architecture:** Fully containerized with **Docker**, using **PostgreSQL** for persistence and **Redis** for atomic ticket counting.
 * **Automated Load Testing:** Includes a custom **K6** stress-test suite that simulates **1,000 concurrent users** making **10,000 booking attempts** to verify system stability and validate the locking mechanism.
 * **RESTful API:** Developed with **FastAPI** and **Uvicorn** for high-performance, asynchronous request handling.
 * **Robust Error Handling:** Designed graceful handling of foreign key constraints and "sold out" scenarios, ensuring the API never crashes under bad input.

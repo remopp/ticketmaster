@@ -1,8 +1,9 @@
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
 from sqlalchemy.exc import IntegrityError
-from .  import models
+from . import models
 from . import schemas
+from . import redis_client
 
 pwd_context = CryptContext(schemes= ["bcrypt"], deprecated = "auto")
 
@@ -35,15 +36,16 @@ def create_event(db: Session , event: schemas.EventCreate):
         return None
 
 def book_ticket(db:Session, booking: schemas.BookingCreate):
-    event = db.query(models.Event).filter(models.Event.id == booking.event_id).with_for_update().first()
-    if(event == None):
-        return None
-    cap = db.query(models.Booking).filter(models.Booking.event_id == booking.event_id).count()
-    if(cap >= event.venue.capacity):
+    if not redis_client.try_reserve_ticket(booking.event_id):
         raise ValueError("venue is fully booked")
     
-    db_booking = models.Booking( user_id = booking.user_id , event_id = booking.event_id)
-    db.add(db_booking)
-    db.commit()
-    db.refresh(db_booking)
-    return db_booking
+    try:
+        db_booking = models.Booking(user_id=booking.user_id, event_id=booking.event_id)
+        db.add(db_booking)
+        db.commit()
+        db.refresh(db_booking)
+        return db_booking
+    except Exception as e:
+        redis_client.release_ticket(booking.event_id)
+        db.rollback()
+        raise e

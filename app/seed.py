@@ -1,5 +1,6 @@
 from .database import sessionlocal , engine
 from . import models
+from . import redis_client
 
 db = sessionlocal()
 db.query(models.Booking).delete()
@@ -9,7 +10,9 @@ db.query(models.Venue).delete()
 db.commit()
 print("database cleared")
 
-db_venue = models.Venue( id = 1,name = "testname" , location = "testlocation" ,  capacity = 1000)
+VENUE_CAPACITY = 1000
+
+db_venue = models.Venue( id = 1,name = "testname" , location = "testlocation" ,  capacity = VENUE_CAPACITY)
 db.add(db_venue)
 db.commit()
 db.refresh(db_venue)
@@ -22,6 +25,9 @@ db.commit()
 db.refresh(db_event)
 if(db_event != None):
     print("event created")
+
+redis_client.init_ticket_counter(event_id=1, capacity=VENUE_CAPACITY)
+print(f"redis counter initialized with {VENUE_CAPACITY} tickets")
 
 for i in range(1, 10001):
     db_user = models.user(id = i, email=f"test.email:{i}" , username = f"test.username:{i}" , hashed_password = "hashedpassasdafaefa") 
